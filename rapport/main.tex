@@ -1,0 +1,50 @@
+\documentclass{rapportProjetConception}
+\usepackage{lipsum}
+\title{Rapport Projet Conception} %Titre du fichier
+\biblioteque
+
+\begin{document}
+
+%----------- Informations du rapport ---------
+
+\titre{Projet de conception et de programmation} %Titre du fichier .pdf
+\sujet{Investigating feature selection techniques to
+	improve data mining tasks} %Nom du sujet
+
+\enseignant{DR Zained \textsc{Garcia}} %Nom de l'enseignant
+
+\eleves{Mickael \textsc{Le Denmat}} %Nom des élèves
+
+%----------- Initialisation -------------------
+
+\fairemarges %Afficher les marges
+\fairepagedegarde %Créer la page de garde
+\tabledematieres %Créer la table de matières
+
+%------------ Corps du rapport ----------------
+\newpage
+\input{chapter/Introduction.tex}
+
+\newpage
+\input{chapter/Chapitre_1.tex}
+
+\newpage
+\input{chapter/Chapitre_2.tex}
+
+\newpage
+\input{chapter/Chapitre_3.tex}
+
+\newpage
+\input{chapter/Conclusion.tex}
+
+%----------------------------------------------
+
+\newpage
+\printbibliography[
+	heading=bibintoc,
+	title={Bibliographie}
+]
+
+%----------------------------------------------
+
+\end{document}

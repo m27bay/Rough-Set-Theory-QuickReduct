@@ -1,0 +1,181 @@
+\section{\rst}
+\rst ou la theorie des ensembles
+approximatifs est basé sur un ensemble de définition que nous allons
+détaillées dans ce chapitre.
+
+\subsection{Un système d'information}
+Commençons par la base : un système d'information. Un système
+d'information (\textit{Information System - IS} en englais) est
+une table ou une matrice avec une ligne par objets renseignés
+(l'ensemble des objets est appelé l'univers (U)) et x colonnes,
+appelé des attributs, décrivant les propriétés de l'objet
+(l'ensemble des attributs est appelé A). \\
+
+C'est données sont utilisées pour faire de la prise de
+dcision, il nous faut pour cela un attribut spécifique,
+que nous utiliserons comme décision. C'est pour cela
+que nous avons créés les systèmes d'informations.
+
+\subsection{Un système de décision}
+Un système de décision (\textit{Decision System - DS}
+en englais) est un système
+d'information avec une, comme dit précédemment,
+colonne supplémentaire appelée décision
+(l'ensemble des décision est appelé $\theta$). Elle correspond
+à la classe de l'objet (exemple un patient peut avoir comme
+décision/ classe "malade" ou "non malade")
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c||c|c|c|c|}
+        \hline
+        $x \in U$ & a & b & c & d \\
+        \hline
+        $x_1$     & 1 & 0 & 2 & 2 \\
+        $x_2$     & 0 & 1 & 1 & 1 \\
+        $x_3$     & 2 & 0 & 0 & 1 \\
+        $x_4$     & 1 & 1 & 0 & 2 \\
+        $x_5$     & 1 & 0 & 2 & 0 \\
+        $x_6$     & 2 & 2 & 0 & 1 \\
+        $x_7$     & 2 & 1 & 1 & 1 \\
+        $x_8$     & 0 & 1 & 1 & 0 \\
+        \hline
+    \end{tabular}
+    \caption{Exemple d'un système d'information}
+    \label{tab:msysteme_information}
+\end{table}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c||c|c|c|c||c|}
+        \hline
+        $x \in U$ & a & b & c & d & e \\
+        \hline
+        $x_1$     & 1 & 0 & 2 & 2 & 0 \\
+        $x_2$     & 0 & 1 & 1 & 1 & 2 \\
+        $x_3$     & 2 & 0 & 0 & 1 & 1 \\
+        $x_4$     & 1 & 1 & 0 & 2 & 2 \\
+        $x_5$     & 1 & 0 & 2 & 0 & 1 \\
+        $x_6$     & 2 & 2 & 0 & 1 & 1 \\
+        $x_7$     & 2 & 1 & 1 & 1 & 2 \\
+        $x_8$     & 0 & 1 & 1 & 0 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{Exemple d'un système de décision}
+    \label{tab:msysteme_decision}
+\end{table}
+Dans un IS ou un DS, il est possible d'avoir de la redondance
+dans les données. Ces données peuvent avoir un, deux voir même
+tous leurs attributs égales. Nous pouvons créer des sous ensembles
+de données grâce à ce critère, c'est ce qu'on appelle : les classes
+d'équivalence.
+
+\subsection{Classe d'équivalence}
+Mathématiquement la classe d'équivalence est définit comme suit :
+Soit un ensemble E muni d'une relation d'équivalence, noté $\sim$.
+Ici deux objets sont équivalent si et seulement si ils possèdent
+les mêmes valeurs pour chaque attributs. On définit une classe
+d'équivalence, noté $[x]$, d'un élément x de E comme l'ensemble
+des y de E tels que $x \sim y$. \cite{wiki_relation_equivalence}
+\begin{equation}
+    y \in [x] \iff x \sim y
+\end{equation}
+
+La redondance des données n'est pas forcèment problèmatique dans le
+machine learning, sauf dans un cas particulier : si deux données
+possèdant les mêmes attributs ont une valeur de décision différentes.
+Lorsque deux objets respectent cette règle, nous avons une
+\ind entre les deux.
+
+\subsection{\ind}
+Soit I = (U, A), avec I un système d'information, U un ensemble
+d'objets et A un ensemble d'attributs. Avec n'importe quel sous
+ensemble $P \subseteq A$. Il existe une relation d'équivalence,
+noté IND(P), définit comme :
+\begin{equation}
+    IND(P) = \{(x, y) \in U^2 | \forall a \in P, a(x) = a(y)\}
+\end{equation}
+La relation IND(P) est la \ind. \\
+Autrement dit deux objets sont indiscernable si pour toutes
+propriétés $a \in P, a(x) = a(y)$. \\
+Dans l'exemple TABLE 2, nous nous pouvons définir trois
+relations indiscernables sur les attributs \{a\}, \{b, c\} et
+\{a, b, c\} qui définissent les trois portions de l'univers :
+\begin{equation}
+    IND(a) = \{\{x_1, x_4, x_5\}, \{x_2, x_8\}, \{x_3, x_6, x_7\}\}
+\end{equation}
+\begin{equation}
+    IND(b, c) = \{\{x_3\}, \{x_1, x_5\}, \{x_2, x_7, x_8\}, \{x_8\}\}
+\end{equation}
+\begin{equation}
+    IND(a, b, c) = \{\{x_1, x_5\}, \{x_2, x_8\}, \{x_3\},
+    \{x_4\}, \{x_6\}, \{x_7\}\}
+\end{equation}
+Si nous calculons la relation indiscernable sur l'ensemble des
+attributs du système, nous notons cela $IND_C$ ou $U/C$.
+
+\subsection{\textit{rough set}}
+Soit un ensemble X d'objets cibles tel que $X \subseteq U$.
+Nous souhaitons représenté X en utilisant un sous-ensemble
+d'attributs P. X comprend une seule classe et nous voulons
+décrire cette classe en à partir des classes d'équivalence des
+attributs dans P. En général, X ne peut pas être décrit
+précisément car il peut inclure ou exclure des objets qui
+ne sont pas distingués sur la base des attributs de P.
+Pour résoudre ce problème nous approchons X en le bornant avec
+la \blower notée \underline{P}(X), et
+la \bupper notée $\Bar{P}(X)$. \\
+
+\newpage
+\subsection{\blower}
+La \blower est définit comme suit :
+\begin{equation}
+    \underline{B}(X) = \{o_j | [o_j]_B \subseteq X\}
+\end{equation}
+C'est l'ensemble complet des objets dans
+$U/P$ qui peuvent être classés dans X sans ambiguïté.
+
+\subsection{\bupper}
+La \bupper est définit comme suit :
+\begin{equation}
+    \Bar{B}(X) = \{o_j | [o_j]_B \cap X \neq \emptyset\}
+\end{equation}
+C'est l'ensemble des objets dans
+$U/P$ qui peuvent possiblement être classés dans X. Ce sont des objets
+possèdent un objets indiscernables. \\
+
+Grâce à ces deux approximations nous pouvons calculer \bboundary
+notée $BN_B(X)$.
+
+\subsection{\bboundary}
+La \bboundary est définit comme :
+\begin{equation}
+    BN_B(X) = \Bar{B}(X) - \underline{B}(X)
+\end{equation}
+
+Une fois que nous avons calculer les différentes approximations pour
+chaque valeurs de décisions, nous pouvons calculer les regions.
+
+\subsection{\posreg}
+La \posreg est définit comme ceci :
+\begin{equation}
+    POS_C\{(d)\} = \bigcup_{X \in U/\{(d)\}} \Bar{C}(X)
+\end{equation}
+
+\subsection{\negreg}
+La \negreg est définit comme ceci :
+\begin{equation}
+    NEG_C\{(d)\} = U - \bigcup_{X \in U/\{(d)\}} \underline{C}(X)
+\end{equation}
+
+\subsection{\reduct}
+\reduct est un sous ensemble minimal d'attributs ayant la même
+\posreg que l'ensemble des attributs.
+
+\subsection{\core}
+\core est un ensemble d'attributs indépendant incluant tous les
+\reduct. \\
+
+\noindent
+Ceci conclus l'explication du \rst. A présent nous allons détaillé
+le fonctionnement des algorithmes du \rst et nous parlerons d'une
+des heuristique, le \quickreduct.
