@@ -413,46 +413,36 @@ nous le supprimons de son groupe et nous renvoyons son groupe. \\
 \subsubsection{\blower, \bupper et \bboundary}
 \begin{lstlisting}
 def b_lower(DS, ind_c, d, d_value):
-	"""
-	Renvoie la B-lower approximation.
+    """
+    Renvoie la B-lower approximation.
 
-	@param DS le système de décision.
-	@param ind_c la liste des objets indiscernables.
-	@param d le nom de la colone de décision.
-	@param d_value la value de décision.
+    @param DS le système de décision.
+    @param ind_c la liste des objets indiscernables.
+    @param d le nom de la colonne de décision.
+    @param d_value la valeur de décision.
 
-	@return la B-lower approximation.
-	"""
-	X = DS.groupby(d)
-	Xi = None
-	for name, groupe in X:
-		if name == d_value:
-			Xi = pd.DataFrame(groupe)
+    @return la B-lower approximation.
+    """
+    X = DS.groupby(d)
+    Xi = None
+    for name, groupe in X:
+        if name == d_value:
+            Xi = pd.DataFrame(groupe)
 
-	if Xi is not None:
-		CXi = []
+    if Xi is not None:
+        CXi = []
 
-		for index in Xi.index:
-			# Nous regardons le groupe indiscernable de cet objet.
-			idc_obj = groupe_ind_c_obj(ind_c, index)
-			
-			# Si il possèdent des objets indiscernables.
-			possede_indiscernable = False
-			if len(idc_obj) != 0:
-				for index_obj2 in idc_obj:
-					# On récupère la décision des objets.
-					obj_d = DS[DS.index == index_obj2][d].iloc[0]
-					obj2_d = DS[DS.index == index][d].iloc[0]
-					
-					if obj_d != obj2_d:
-						possede_indiscernable = True
-						break
-			if not possede_indiscernable:
-				CXi.append(index)
-		CXi.sort()
-		return CXi
-	else:
-		return "error"
+        for index in Xi.index:
+            # Nous regardons le groupe indiscernable de cet objet.
+            idc_obj = groupe_ind_c_obj(ind_c, index)
+            
+            # Si aucun des objets indiscernables de cet objet n'a une décision différente.
+            if not any(DS.at[index_obj2, d] != DS.at[index, d] for index_obj2 in idc_obj):
+                CXi.append(index)
+        CXi.sort()
+        return CXi
+    else:
+        return "error"
 \end{lstlisting}
 Le fonctionnement de cet algorithme à été évoqué durant la partie
 pseudocode, mais il y a quelques différences. La première étant entre
@@ -462,44 +452,36 @@ de selectionner la valeur de décision en fonction de leur indexes.
 \newpage
 \begin{lstlisting}
 def b_upper(DS, ind_c, d, d_value):
-	"""
-	Renvoie la B-upper approximation.
+    """
+    Renvoie la B-upper approximation.
 
-	@param DS le système de décision.
-	@param ind_c la liste des objets indiscernables.
-	@param d le nom de la colone de décision.
-	@param d_value la value de décision.
+    @param DS le système de décision.
+    @param ind_c la liste des objets indiscernables.
+    @param d le nom de la colonne de décision.
+    @param d_value la valeur de décision.
 
-	@return la B-upper approximation.
-	"""
-	X = DS.groupby(d)
-	Xi = None
-	for name, groupe in X:
-		if name == d_value:
-			Xi = pd.DataFrame(groupe)
+    @return la B-upper approximation.
+    """
+    X = DS.groupby(d)
+    Xi = None
+    for name, groupe in X:
+        if name == d_value:
+            Xi = pd.DataFrame(groupe)
 
-	if Xi is not None:
-		CXi = list(Xi.index)
-		for index in Xi.index:
-			# Nous regardons le groupe indiscernable de cet objet.
-			idc_obj = groupe_ind_c_obj(ind_c, index)
-			
-			# Si il possèdent des objets indiscernables.
-			list_add = []
-			if len(idc_obj) != 0:
-				for index_obj2 in idc_obj:
-					
-					# On récupère la décision des objets.
-					obj_d = DS[DS.index == index_obj2][d].iloc[0]
-					obj2_d = DS[DS.index == index][d].iloc[0]
-					
-					if obj_d != obj2_d:
-						list_add.append(index_obj2)
-			CXi += list_add
-		CXi.sort()
-		return CXi
-	else:
-		return "error"
+    if Xi is not None:
+        CXi = list(Xi.index)
+        for index in Xi.index:
+            # Nous regardons le groupe indiscernable de cet objet.
+            idc_obj = groupe_ind_c_obj(ind_c, index)
+            
+            # Si il possède des objets indiscernables.
+            list_add = [index_obj2 for index_obj2 in idc_obj
+                        if DS.at[index_obj2, d] != DS.at[index, d]]
+            CXi += list_add
+        CXi.sort()
+        return CXi
+    else:
+        return "error"
 \end{lstlisting}
 \begin{lstlisting}
 def b_boundary(DS, bupper, blower):
